@@ -1,0 +1,25 @@
+{% extends 'radio/base.html' %}
+{% block title %}Модерация — Школьное радио{% endblock %}
+{% block content %}
+<h1>Модерация <span class="muted">{{ pending|length }}</span></h1>
+{% for t in pending %}
+<div class="card mod">
+  <div>
+    <div class="title">{{ t.title }}</div>
+    <div class="artist">{{ t.artist }}</div>
+    <div class="muted">{{ t.uploaded_by }}, {{ t.school_class }} · {{ t.created_at|date:"d.m H:i" }}</div>
+  </div>
+  <audio controls preload="none" src="{{ t.file.url }}"></audio>
+  <form method="post" class="mod-actions">
+    {% csrf_token %}
+    <input type="hidden" name="track" value="{{ t.id }}">
+    <button class="btn" name="action" value="approve">Одобрить</button>
+    <input name="reason" placeholder="Причина отказа (необязательно)">
+    <button class="btn btn-danger" name="action" value="reject">Отклонить</button>
+  </form>
+</div>
+{% empty %}
+<p class="muted">Новых треков нет.</p>
+{% endfor %}
+<p><a href="{% url 'admin:radio_breakslot_changelist' %}">Расписание перемен</a> · <a href="{% url 'admin:radio_track_changelist' %}">Все треки</a></p>
+{% endblock %}

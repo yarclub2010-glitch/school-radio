@@ -1,0 +1,22 @@
+{% extends 'radio/base.html' %}{% load static %}
+{% block title %}Актовый зал — Школьное радио{% endblock %}
+{% block body_class %}hall{% endblock %}
+{% block content %}
+{% csrf_token %}
+<section class="stage">
+  <div class="status" id="status">Эфир не запущен</div>
+  <div class="np-title" id="np-title">Школьное радио</div>
+  <div class="np-artist" id="np-artist">Откройте эту страницу на компьютере, подключённом к колонкам</div>
+  <div class="np-by muted" id="np-by"></div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="controls">
+    <button class="btn big" id="start">▶ Запустить эфир</button>
+    <button class="btn" id="skip" hidden>Следующий трек ⏭</button>
+    <label class="muted">Громкость <input type="range" id="vol" min="0" max="1" step="0.05" value="0.8"></label>
+  </div>
+  <div class="up-next muted" id="up-next"></div>
+  <ul class="schedule" id="schedule"></ul>
+</section>
+<audio id="audio" preload="auto"></audio>
+{% endblock %}
+{% block scripts %}<script src="{% static 'radio/hall.js' %}"></script>{% endblock %}

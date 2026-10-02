@@ -1,0 +1,17 @@
+{% extends 'radio/base.html' %}
+{% block title %}Загрузить трек — Школьное радио{% endblock %}
+{% block content %}
+<h1>Загрузить трек</h1>
+<p class="muted">Трек попадёт в плейлист после проверки модератором. Без мата и треков 18+, иначе отклоним.</p>
+<form class="card form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% for field in form %}
+  <label>
+    <span>{{ field.label }}</span>
+    {{ field }}
+    {% for e in field.errors %}<small class="error">{{ e }}</small>{% endfor %}
+  </label>
+  {% endfor %}
+  <button class="btn" type="submit">Отправить на проверку</button>
+</form>
+{% endblock %}

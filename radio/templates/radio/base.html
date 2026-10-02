@@ -1,0 +1,25 @@
+{% load static %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Школьное радио{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'radio/style.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="top">
+    <a class="logo" href="{% url 'playlist' %}">♪ Школьное радио</a>
+    <nav>
+      <a href="{% url 'playlist' %}">Плейлист</a>
+      <a href="{% url 'upload' %}">Загрузить трек</a>
+      <a href="{% url 'hall' %}">Актовый зал</a>
+      {% if user.is_staff %}<a href="{% url 'moderation' %}">Модерация</a>{% endif %}
+    </nav>
+  </header>
+  <main>
+    {% for m in messages %}<div class="msg msg-{{ m.tags }}">{{ m }}</div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

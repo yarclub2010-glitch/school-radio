@@ -1,0 +1,38 @@
+{% extends 'radio/base.html' %}{% load static %}
+{% block content %}
+{% if now_playing %}<div class="now">Сейчас в актовом зале: <b>{{ now_playing }}</b></div>{% endif %}
+
+<div class="head-row">
+  <h1>Плейлист <span class="muted">{{ tracks|length }}</span></h1>
+  <form class="search" method="get">
+    <input name="q" value="{{ q }}" placeholder="Поиск по названию или исполнителю">
+  </form>
+</div>
+{% if user.is_staff and pending_count %}
+  <p><a class="badge" href="{% url 'moderation' %}">Ждут проверки: {{ pending_count }}</a></p>
+{% endif %}
+
+<ol class="tracks" id="tracks">
+  {% for t in tracks %}
+  <li class="track" data-src="{{ t.file.url }}" data-title="{{ t.title }}" data-artist="{{ t.artist }}">
+    <button class="play" aria-label="Слушать">▶</button>
+    <div class="info">
+      <div class="title">{{ t.title }}</div>
+      <div class="artist">{{ t.artist }}</div>
+    </div>
+    <div class="by muted">{{ t.uploaded_by }}, {{ t.school_class }}</div>
+  </li>
+  {% empty %}
+  <li class="empty">{% if q %}Ничего не нашлось.{% else %}Пока пусто — <a href="{% url 'upload' %}">загрузите первый трек</a>!{% endif %}</li>
+  {% endfor %}
+</ol>
+
+<div class="player" id="player" hidden>
+  <button id="prev" aria-label="Предыдущий">⏮</button>
+  <button id="toggle" aria-label="Пауза">⏸</button>
+  <button id="next" aria-label="Следующий">⏭</button>
+  <div class="player-info"><b id="p-title"></b> <span class="muted" id="p-artist"></span></div>
+  <audio id="audio" controls></audio>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'radio/playlist.js' %}"></script>{% endblock %}
